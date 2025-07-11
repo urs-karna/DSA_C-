@@ -1,28 +1,34 @@
 class Solution {
 public:
-    int trap(vector<int>& height) {
-        int n = height.size();
+    int trap(vector<int>& arr) {
+        int n = arr.size();
         // prefix height
-        vector<int> prefix(n);
-        prefix[0] = height[0];
+        int leftmax = 0, rightmax = 0, totalWater = 0;
+        int l = 0, r = n - 1;
 
-        for (int i = 1; i < n; i++) {
-            prefix[i] = max(prefix[i - 1], height[i]);
-        }
-        // suffex
-        vector<int> suffix(n);
-        suffix[n - 1] = height[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            suffix[i] = max(suffix[i + 1], height[i]);
-        }
+        while (l < r) {
+            if (arr[l] < arr[r]) {
 
-        int totalWater = 0;
-        for (int i = 0; i < n; i++) {
+                if (leftmax > arr[l]) {
+                    totalWater += leftmax - arr[l];
+                } else
+                    leftmax = arr[l];
 
-            if (height[i] < prefix[i] && height[i] < suffix[i]) {
-                totalWater += min(prefix[i], suffix[i]) - height[i];
+                l++;
+            } else {
+
+                if (rightmax > arr[r]) {
+                    totalWater += rightmax - arr[r];
+                }
+
+                else {
+                    rightmax = arr[r];
+                }
+
+                r--;
             }
         }
+
         return totalWater;
     }
 };
