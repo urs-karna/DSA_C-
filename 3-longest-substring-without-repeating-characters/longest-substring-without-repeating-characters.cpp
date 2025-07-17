@@ -6,20 +6,22 @@ public:
         if(n==0) return 0;
         if(n==1) return 1;
         int long_substr=1;
-        for(int i=0;i<n;i++) {
-              int  len_substr=0;
-              unordered_map<int,int>mpp;
-            for( int j=i;j<n;j++) {
-                  
-                 if(mpp.find(s[j]) == mpp.end()) {
-                    mpp[s[j]]++;
-                    len_substr++;
-                 }
-                 else break;
+        unordered_map<char ,int>mp;
+        int l=0,r=0;
+         while( r < n) {
+           if( mp.find(s[r]) != mp.end() ){    
+             if(mp[s[r]] >= l ) {
+               l= mp[s[r]] +1;
+             }
+           }
 
-            } 
-            long_substr= max(long_substr, len_substr);
-        }
-        return long_substr;
+           int  len=  r-l+1;
+           long_substr= max(long_substr, len);
+
+           mp[s[r]] = r;
+           r++;
+
+         }
+       return  long_substr;
     }
 };
