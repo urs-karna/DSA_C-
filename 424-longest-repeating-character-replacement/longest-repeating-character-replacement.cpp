@@ -9,19 +9,14 @@ public:
 
             max_freq = max(max_freq, hash_arr[s[r] - 'A']);
 
-            // int changes= (r-l+1) - max_freq;
-
-            while ((r - l + 1) - max_freq > k) {
+            if ((r - l + 1) - max_freq > k) {
 
                 hash_arr[s[l] - 'A']--;
-                // l++;
 
-                // max_freq=0;
-                // for(int i=0;i<26;i++) max_freq= max(max_freq, hash_arr[i]);
                 l++;
+                // no need no check the max_freq again
             }
 
-            // if(r-l+1 <= k)
             max_len = max(max_len, r - l + 1);
 
             r++;
