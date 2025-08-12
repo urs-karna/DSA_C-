@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
-     
+     int maxi=0;
      int max_depth(TreeNode* root )
       {
     
@@ -30,11 +30,11 @@ public:
          int LH = max_depth(root->left);
 
          int RH= max_depth(root->right);
-          int through_root= LH + RH;
+          maxi=max(maxi, LH + RH);
 
           int left=diameterOfBinaryTree(root->left);
           int right=diameterOfBinaryTree(root->right);
-          return max(through_root,max(left,right));
+          return maxi;
 
 
     }
