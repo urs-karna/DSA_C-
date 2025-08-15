@@ -11,31 +11,26 @@
  */
 class Solution {
 public:
-    vector<int> rightSideView(TreeNode* root) {
-        
-        map<int,TreeNode*>node_list;
+     void Find_right_view(TreeNode* root, int level,vector<int>& res)  {
+          
+          if(root==NULL) return;
 
-        queue<pair<TreeNode*,int>>q;
-        vector<int>res;
-        if(root==NULL) return res;
+          if(res.size()==level) {
+            res.push_back(root->val);
+          }
 
-        q.push({root,0});
-        while(!q.empty()) {
+          Find_right_view(root->right, level+1,res);
+          Find_right_view(root->left, level+1,res);
 
-            auto top_ele=q.front();
-            q.pop();
-            TreeNode* node = top_ele.first;
-            int x = top_ele.second;
 
-            node_list[x]=node;
 
-            if(node->left) q.push({node->left,x+1});
-            if(node->right) q.push({node->right,x+1});
-        } 
-        for(auto it : node_list) {
-            res.push_back(it.second->val);
-
-        }
-        return res;
     }
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int>res;
+        Find_right_view(root,0,res);
+
+         return res;
+        }
+        
+    
 };
