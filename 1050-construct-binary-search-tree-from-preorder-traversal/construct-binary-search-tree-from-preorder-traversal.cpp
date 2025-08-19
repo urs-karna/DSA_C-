@@ -29,10 +29,10 @@ public:
             return;
          }
          if(val < root->val) {
-          return  insert(root->left,val);
+            insert(root->left,val);
          }
          if(val> root->val) {
-           return  insert(root->right,val);
+             insert(root->right,val);
          }
 
     }
