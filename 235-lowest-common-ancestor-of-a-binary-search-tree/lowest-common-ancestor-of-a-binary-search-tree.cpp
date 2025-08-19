@@ -10,39 +10,19 @@
 
 class Solution {
 public:
-    bool find_path(TreeNode* root, TreeNode* key , vector<TreeNode*> &res) {
-
-        if(root == NULL) return false ;
-         res.push_back(root);
-         if(root->val == key->val ) return true;
-
-         if(find_path(root->left,key,res) || find_path(root->right,key,res) ) return true;
-         res.pop_back();
-         return false;
-
-    }
-
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         
-       vector<TreeNode*>arr1,arr2;
-       find_path(root,p,arr1);
-       find_path(root,q,arr2);
+        if(root==NULL) return root;  //there is no root
 
-       int i=0,j=0;
-      TreeNode* dummy = NULL;
-       while (i< arr1.size()  && j<arr2.size()) {
+        if(root== p || root == q  ) return root;
 
-        if(arr1[i] == arr2[j]) {
+         TreeNode* lh= lowestCommonAncestor(root->left,p,q);
 
-            dummy=arr1[i];
-            i++;
-            j++;
+         TreeNode* rh = lowestCommonAncestor(root->right,p,q);
 
-        } 
-        else break;
-       }
-      
-     return dummy;
+         if(lh == NULL) return rh;
+         else if(rh == NULL) return lh;
+         else return root;
 
     }
 };
