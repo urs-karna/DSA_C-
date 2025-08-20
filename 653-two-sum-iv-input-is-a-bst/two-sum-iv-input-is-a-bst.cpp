@@ -11,28 +11,42 @@
  */
 class Solution {
 public:
- void inorder(TreeNode* root,vector<int> &res) {
-         
-        if(root==NULL) return ;
-         inorder(root->left,res);
-         res.push_back(root->val);
-          inorder(root->right,res);
+    void add_stack_asc(TreeNode* root, stack<TreeNode*>&st1) {
+        while(root) {
+            st1.push(root);
+            root=root->left;
+        }
+    }
+    void add_stack_desc(TreeNode* root, stack<TreeNode*>&st2) {
+        while(root) {
+            st2.push(root);
+            root=root->right;
+        }
+    }
 
-     }
+
+
     bool findTarget(TreeNode* root, int k) {
-        if(root->left == NULL && root->right == NULL) return 0;
-        
-        vector<int>res;
-        inorder(root, res);
+        if(root->left ==NULL && root->right==NULL) return 0;
+        stack<TreeNode*>st1,st2;
+        add_stack_asc(root,st1);
+        add_stack_desc(root,st2);
+        while((!st1.empty()&& !st2.empty())  && st1.top() != st2.top()) {
+           TreeNode* st1_top=st1.top();
+           TreeNode* st2_top = st2.top();
+           int sum= st1_top->val + st2_top->val;
+           if(sum==k) return true;
 
-        int i=0,j=res.size()-1;
-        while(i<j) {
-            int sum = res[i] + res[j];
-            if(sum==k) return true;
-            if(sum > k) j--;
-            else i++;
+           else if(sum > k) {
+            st2.pop();
+            if(st2_top->left) add_stack_desc(st2_top->left,st2);
+           }
+           else {
+            st1.pop();
+            if(st1_top->right) add_stack_asc(st1_top->right,st1);
+           }
 
         }
-        return false;
+        return false ;
     }
 };
