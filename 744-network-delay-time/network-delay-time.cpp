@@ -15,7 +15,7 @@ public:
         }
 
 
-        queue<pair<int,int>>q;
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>q;
         q.push({0,k});
 
         vector<int>dist(n+1,1e9);
@@ -23,7 +23,7 @@ public:
 
         while(!q.empty()) {
 
-            auto it = q.front();
+            auto it = q.top();
             q.pop();
 
             int dis = it.first;
