@@ -1,49 +1,49 @@
 class Solution {
-private:
-    bool DFS(int node, vector<vector<int>> adj, vector<int>& vis,
-             vector<int>& PathVis, vector<int>& res) {
-
-        vis[node] = 1;
-
-        PathVis[node] = 1;
-
-        for (auto it : adj[node]) {
-
-            if (!vis[it]) {
-
-                if (DFS(it, adj, vis, PathVis, res) == true)
-                    return true;
-            } else if (PathVis[it] == 1)
-                return true;
-        }
-
-        PathVis[node] = 0;
-        res.push_back(node);
-        return false;
-    }
-
 public:
-    vector<int> findOrder(int V, vector<vector<int>>& grid) {
-        // adj list
-        vector<vector<int>> adj(V);
-        for (int i = 0; i < grid.size(); i++) {
-            int u = grid[i][0];
-            int v = grid[i][1];
-            adj[v].push_back(u);
-        }
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        
+          
+        int V = numCourses;
 
-        vector<int> vis(V, 0);
-        vector<int> PathVis(V, 0);
-        vector<int> res;
-        for (int i = 0; i < V; i++) {
-            if (!vis[i]) {
-                if (DFS(i, adj, vis, PathVis, res) == true)
-                    return {};
-            }
-        }
-
-      reverse(res.begin(),res.end());
+        vector<vector<int>>adj(V);
+        vector<int>inorder(V,0);
       
-        return res;
+      for( int i =0; i<prerequisites.size();i++) {
+      
+        int u = prerequisites[i][0];
+        int v = prerequisites[i][1];
+        adj[v].push_back(u);
+        inorder[u]++;
+      
+      }
+
+      queue<int>q;
+      for(int i =0;i<V;i++) {
+
+        if(inorder[i] == 0){
+            q.push(i);
+        }
+      }
+
+     vector<int>topo;
+
+      while(!q.empty()) {
+        
+        int node = q.front();
+        q.pop();
+        topo.push_back(node);
+      for ( auto it : adj[node]){
+
+        inorder[it]--;
+        if(inorder[it]==0 ) q.push(it);
+      }
+
+
+      }
+
+       if( topo.size() != V) return {};
+        return topo;
+
+
     }
 };
