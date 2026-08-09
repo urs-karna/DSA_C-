@@ -1,23 +1,36 @@
 class Solution {
-public:
-  
-    int jump(vector<int>& arr) {
-         int n=arr.size();
-         
-         if(n==1 ) return 0;
-          int jump=0;
-          int l=0,r=0;
-          while(r< n-1)  {
-          int fartest=0;    
-          for(int i=l;i<=r;i++)  {
-             
-              fartest= max(i+arr[i],fartest);
-              
-          }
-           l = r+1;
-           r=fartest;
-           jump +=1;
-          }
-          return jump;
+private:
+  int minJumps(int idx,vector<int>& nums,vector<int>& dp) {
+
+   if ( idx >= nums.size()-1 ) return 0;
+   if(dp[idx] != -1) return dp[idx];
+
+   int mini = INT_MAX;
+
+   for(int i = 1; i <= nums[idx]; i++){
+
+    int jumps =  minJumps(idx + i, nums, dp);
+ 
+     if (jumps != INT_MAX) {
+        mini = min(mini, 1 + jumps);
+      }
     }
+
+   
+   return   dp[idx] = mini;
+
+
+  }
+
+public:
+    int jump(vector<int>& nums) {
+        vector<int>dp(nums.size(),-1);
+        return minJumps(0,nums,dp);
+
+        
+    }
+   
+
+
+
 };
