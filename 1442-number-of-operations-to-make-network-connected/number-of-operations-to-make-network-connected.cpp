@@ -1,86 +1,72 @@
-class DisjointSet {
+class Disjoint {
+
 public:
-   
-    vector<int> parent, size_arr;
+  vector<int>sizeArr, parent;
+  //contrctor 
+   Disjoint(int n) {
 
-
-
-DisjointSet( int n) {
-
-    parent.resize(n);
-    size_arr.resize(n);
-
-    for(int i =0 ;i<n;i++) {
-
+     sizeArr.resize(n+1,1);
+     parent.resize(n+1);
+     
+     for(int i = 0 ; i<= n;i++){
         parent[i] = i;
-        size_arr[i] = 1;
-    }
-}
+     }
+   }
 
-// for ultimate parent 
- int find_u_par( int node ) {
-  
-  if( node == parent[node]) return node;
+   int FindUpar(int node){
+        
+        if( parent[node] == node) return node;
 
-  else {
-    return parent[node] = find_u_par(parent[node]);
-  }
+        return  parent[node]= FindUpar(parent[node]);
 
- }
+   }
 
-//union By size 
-
-void UnionBysize( int u , int v) {
-
-    int ulp_u = find_u_par(u);
-    int ulp_v = find_u_par(v);
-
-    if( ulp_u == ulp_v) return;
-
-    if( size_arr[ulp_u] < size_arr[ulp_v]) {
-
-        parent[ulp_u] = ulp_v;
-        size_arr[ulp_v] += size_arr[ulp_u];
-    }
-    else {
-        parent[ulp_v] = ulp_u;
-        size_arr[ulp_u] += size_arr[ulp_v];
-    }
-}
+   void UnionBySize(int ulp_u, int ulp_v) {
 
 
+       if( ulp_u == ulp_v) return;
 
+       if( sizeArr[ulp_u] < sizeArr[ulp_v]) {
+
+            parent[ulp_u] = ulp_v;
+            sizeArr[ulp_v] += sizeArr[ulp_u];
+       }
+       else {
+            parent[ulp_v] = ulp_u;
+            sizeArr[ulp_u] += sizeArr[ulp_v];
+
+       }
+
+   }
 };
+
 
 class Solution {
 public:
     int makeConnected(int n, vector<vector<int>>& connections) {
-        int no_edges = connections.size();
-
-        if(no_edges < n-1) return -1;
-         int ExtraEdges = 0;
-        DisjointSet ds(n);
         
-        for( auto it : connections) {
+    int cnt=0, ExtraCnt =0;
 
-            int u = it[0];
-            int v = it[1];
-            if( ds.find_u_par(u) == ds.find_u_par(v)) {
-             
-             ExtraEdges++;
+    Disjoint  ds(n);
 
-            }
-            else {
-                ds.UnionBysize(u, v);
-            }
+    for( int  i =0; i< connections.size();i++) {
+
+        int u = connections[i][0];
+        int v = connections[i][1];
+        int utp_u = ds.FindUpar(u);
+        int utp_v = ds.FindUpar(v);
+
+        if( utp_u == utp_v) ExtraCnt++;
+        else {
+            cnt++;
+            ds.UnionBySize(utp_u, utp_v);
         }
 
-    int conC =0;
-    for(int i=0;i<n;i++) {
-        if(ds.parent[i] == i) conC++;
+        
     }
-    int ans = conC -1;
-     if(ExtraEdges >= ans ) return ans;
-     else  return -1;
+
+    if (cnt+ ExtraCnt >= n-1) return n-1-cnt;
+    else return -1;
+
     }
 };
